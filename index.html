@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electric Car Recommendation</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            max-width: 500px;
+            margin: 20px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 16px;
+            color: #333;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Electric Car Recommendation</h1>
+    <label for="umur">Age</label>
+    <input type="number" id="umur" name="umur" placeholder="Enter your age">
+
+    <label for="gaya">Style Preference</label>
+    <select id="gaya" name="gaya">
+        <option value="sporty">Sporty</option>
+        <option value="luxury">Luxury</option>
+        <option value="economic">Economic</option>
+    </select>
+
+    <label for="pekerjaan">Job Title</label>
+    <input type="text" id="pekerjaan" name="pekerjaan" placeholder="Enter your job title">
+
+    <label for="manufacturer">Preferred Manufacturer</label>
+    <select id="manufacturer" name="manufacturer">
+        <option value="Tesla">Tesla</option>
+        <option value="Nissan">Nissan</option>
+        <option value="BMW">BMW</option>
+        <option value="Mercedes-Benz">Mercedes-Benz</option>
+        <option value="Volkswagen">Volkswagen</option>
+        <option value="Audi">Audi</option>
+        <option value="BYD">BYD</option>
+        <option value="Hyundai">Hyundai</option>
+        <option value="Kia">Kia</option>
+        <option value="Chery">Chery</option>
+        <option value="Wuling">Wuling</option>
+        <option value="all">All Manufacturers</option>
+    </select>
+
+    <button onclick="getRecommendation()">Get Recommendation</button>
+
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+    function getRecommendation() {
+        const umur = document.getElementById('umur').value;
+        const gaya = document.getElementById('gaya').value;
+        const pekerjaan = document.getElementById('pekerjaan').value;
+        const manufacturer = document.getElementById('manufacturer').value; // Get the manufacturer value
+
+        if (!umur || !gaya || !pekerjaan || !manufacturer) {
+            alert('Please fill in all fields');
+            return;
+        }
+
+        // Send POST request to Flask backend
+        fetch('/rekomendasi-mobil', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                umur: umur,
+                gaya: gaya,
+                pekerjaan: pekerjaan,
+                manufacturer: manufacturer
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.rekomendasi) {
+                document.getElementById('result').innerHTML = `<strong>Recommendation:</strong> ${data.rekomendasi}`;
+            } else {
+                document.getElementById('result').innerHTML = `<strong>Error:</strong> ${data.error}`;
+            }
+        })
+        .catch(error => {
+            document.getElementById('result').innerHTML = `<strong>Error:</strong> ${error}`;
+        });
+    }
+</script>
+
+</body>
+</html>

@@ -16,6 +16,7 @@
             font-family: 'Arial', sans-serif;
             background-color: #f0f2f5;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
@@ -86,6 +87,23 @@
             color: #333;
         }
 
+        /* Footer Styles */
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .container {
@@ -137,19 +155,23 @@
     <div class="result" id="result"></div>
 </div>
 
+<!-- Footer -->
+<footer>
+    <p>&copy; 2024 William Bunarto | <a href="https://github.com/WilliamBunarto" target="_blank">Portfolio</a></p>
+</footer>
+
 <script>
     function getRecommendation() {
         const umur = document.getElementById('umur').value;
         const gaya = document.getElementById('gaya').value;
         const pekerjaan = document.getElementById('pekerjaan').value;
-        const manufacturer = document.getElementById('manufacturer').value; // Get the manufacturer value
+        const manufacturer = document.getElementById('manufacturer').value;
 
         if (!umur || !gaya || !pekerjaan || !manufacturer) {
             alert('Please fill in all fields');
             return;
         }
 
-        // Send POST request to Flask backend
         fetch('/rekomendasi-mobil', {
             method: 'POST',
             headers: {
